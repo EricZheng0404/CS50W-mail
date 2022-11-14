@@ -79,20 +79,23 @@ function view_email(id) {
     reply_button.innerHTML = 'Reply';
     reply_button.className = "btn btn-success";
     reply_button.addEventListener('click', function(event) {
-      // Autofill the email info
-      document.querySelector('#compose-recipients').value = email.sender;
+      event.preventDefault();
+      document.querySelector('#emails-view').style.display = 'none';
+      document.querySelector('#compose-view').style.display = 'block';
+      document.querySelector('#email-content-view').style.display = 'none';
+
+      document.querySelector('#compose-recipients').value = email.sender
       let subject = email.subject;
       if (subject.split(" ")[0] != 'Re:') {
         subject = 'Re: ' + subject;
       }
       document.querySelector('#compose-subject').value = subject
       document.querySelector('#compose-body').value = `
-         On ${email.timestamp} ${email.sender} wrote: ${email.body} <br>
-       `
-      
-       // Send the mail using new_email() function
-      new_email(event);
+        On ${email.timestamp} ${email.sender} wrote: ${email.body} 
+      `
 
+      document.querySelector('#compose-form').addEventListener('submit', new_email);
+      
     });
     document.querySelector('#email-content-view').append(reply_button);
   });
